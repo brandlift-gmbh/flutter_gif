@@ -261,6 +261,10 @@ Future<List<ImageInfo>> fetchGif(ImageProvider provider) async {
   for (int i = 0; i < codec.frameCount; i++) {
     final frameInfo = await codec.getNextFrame();
     final duration = frameInfo.duration.inSeconds;
+    // if the frame is shorter than 1 second, add it
+    if (frameInfo.duration.inMilliseconds > 0 && duration == 0) {
+      infos.add(ImageInfo(image: frameInfo.image));
+    }
     for (int sec = 1; sec <= duration; sec++) {
       infos.add(ImageInfo(image: frameInfo.image));
     }
